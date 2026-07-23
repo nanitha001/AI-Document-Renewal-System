@@ -2,7 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 SENDER_EMAIL = "natarajanitha001@gmail.com"
-APP_PASSWORD = "kzky fhti gpzv zkce"
+APP_PASSWORD = "thiy eoye pyde gwil"
 
 
 def send_email(receiver_email, document_name, expiry_date):
