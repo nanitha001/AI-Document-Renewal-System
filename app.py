@@ -6,7 +6,6 @@ import schedule
 import time
 import threading
 
-
 from datetime import datetime
 from datetime import datetime, timedelta
 
@@ -506,6 +505,10 @@ User Question:
 # -----------------------------
 # Daily AI Expiry Checker
 # -----------------------------
+
+# -----------------------------
+# Check Expiry Dates
+# -----------------------------
 def check_expiry_dates():
 
     conn = sqlite3.connect("database.db")
@@ -544,7 +547,6 @@ def check_expiry_dates():
 
         print(f"{document_name} | Days Left: {days_left}")
 
-        # Send only one reminder per day
         if days_left == reminder_days and last_reminder_date != str(today):
 
             send_email(
@@ -570,12 +572,15 @@ def check_expiry_dates():
     conn.close()
 
 
-
-# Check every day at 9 AM
-# Run every minute
+# ----------------------------------
+# Schedule Reminder Every Minute
+# ----------------------------------
 schedule.every(1).minutes.do(check_expiry_dates)
 
+
 def run_scheduler():
+
+    print("✅ Scheduler Started")
 
     while True:
 
@@ -584,14 +589,21 @@ def run_scheduler():
         time.sleep(1)
 
 
+# ----------------------------------
+# Start Scheduler
+# ----------------------------------
+scheduler_thread = threading.Thread(
+    target=run_scheduler,
+    daemon=True
+)
+
+scheduler_thread.start()
+
+
+# ----------------------------------
+# Flask App
+# ----------------------------------
 if __name__ == "__main__":
-
-    scheduler_thread = threading.Thread(
-        target=run_scheduler,
-        daemon=True
-    )
-
-    scheduler_thread.start()
 
     port = int(os.environ.get("PORT", 8080))
 
